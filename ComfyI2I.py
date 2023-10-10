@@ -930,7 +930,13 @@ class Mask_Ops:
         def packages(versions=False):
             import sys
             import subprocess
-            return [( r.decode().split('==')[0] if not versions else r.decode() ) for r in subprocess.check_output([sys.executable, '-s', '-m', 'pip', 'freeze']).split()]
+
+            if "python_embeded" in sys.executable or "python_embedded" in sys.executable:
+                pip_cmd = [sys.executable, "-s", "-m", "pip", "freeze"]
+            else:
+                pip_cmd = [sys.executable, "-m", "pip", "freeze"]
+
+            return [( r.decode().split('==')[0] if not versions else r.decode() ) for r in subprocess.check_output(pip_cmd).split()]
 
         # PIL to Mask
         def pil2mask(image):
